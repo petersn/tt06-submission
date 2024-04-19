@@ -121,6 +121,7 @@ endmodule
 // Because memory is so slow, we need a small cache in order to stand a chance.
 module cache (
   input wire ena,
+  input wire rst_n,
   input wire clk,
 
   // Actual memory port.
@@ -829,6 +830,7 @@ module tt_um_petersn_micro1 (
   cache cache_inst(
     .ena(ena),
     .clk(clk_100mhz),
+    .rst_n(rst_n),
 
     .mem_address(cpu_mem_address),
     .mem_write_value(cpu_mem_write_value),
