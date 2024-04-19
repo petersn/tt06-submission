@@ -941,7 +941,7 @@ module tt_um_petersn_micro1 (
   wire [9:0] offset_scanline = scanline - 35;
   wire [4:0] current_row = offset_scanline[8:4];
   wire [3:0] pixel_y = offset_scanline[3:0];
-  // Each pixel is 4 cycles long.
+  // Each pixel is 2 cycles long.
   wire [6:0] current_col = ctr[11:5];
   wire [3:0] pixel_x = ctr[4:1];
 
