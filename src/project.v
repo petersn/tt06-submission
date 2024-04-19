@@ -811,31 +811,31 @@ module tt_um_petersn_micro1 (
   reg                              cpu_mem_request;
   reg                              cpu_mem_request_complete;
 
-  // reg [`SRAM_ADDRESS_SIZE - 1 : 0] cache_mem_address;
-  // reg [`MEMORY_WORD_SIZE - 1 : 0]  cache_mem_write_value;
-  // reg                              cache_mem_write_enable;
-  // reg [`MEMORY_WORD_SIZE - 1 : 0]  cache_mem_read_value;
-  // reg                              cache_mem_request;
-  // reg                              cache_mem_request_complete;
+  reg [`SRAM_ADDRESS_SIZE - 1 : 0] cache_mem_address;
+  reg [`MEMORY_WORD_SIZE - 1 : 0]  cache_mem_write_value;
+  reg                              cache_mem_write_enable;
+  reg [`MEMORY_WORD_SIZE - 1 : 0]  cache_mem_read_value;
+  reg                              cache_mem_request;
+  reg                              cache_mem_request_complete;
 
-  // // Instantiate the cache.
-  // cache cache_inst(
-  //   .ena(ena),
-  //   .clk(clk_100mhz),
+  // Instantiate the cache.
+  cache cache_inst(
+    .ena(ena),
+    .clk(clk_100mhz),
 
-  //   .mem_address(cpu_mem_address),
-  //   .mem_write_value(cpu_mem_write_value),
-  //   .mem_write_enable(cpu_mem_write_enable),
-  //   .mem_read_value(cpu_mem_read_value),
-  //   .mem_request(cpu_mem_request),
-  //   .mem_request_complete(cpu_mem_request_complete),
+    .mem_address(cpu_mem_address),
+    .mem_write_value(cpu_mem_write_value),
+    .mem_write_enable(cpu_mem_write_enable),
+    .mem_read_value(cpu_mem_read_value),
+    .mem_request(cpu_mem_request),
+    .mem_request_complete(cpu_mem_request_complete),
 
-  //   .cache_address(cache_mem_address),
-  //   .cache_write_value(cache_mem_write_value),
-  //   .cache_write_enable(cache_mem_write_enable),
-  //   .cache_read_value(cache_mem_read_value),
-  //   .cache_request(cache_mem_request),
-  //   .cache_request_complete(cache_mem_request_complete)
+    .cache_address(cache_mem_address),
+    .cache_write_value(cache_mem_write_value),
+    .cache_write_enable(cache_mem_write_enable),
+    .cache_read_value(cache_mem_read_value),
+    .cache_request(cache_mem_request),
+    .cache_request_complete(cache_mem_request_complete)
   // );
 
   // wire [`SRAM_ADDRESS_SIZE - 1 : 0] cache_mem_address = cpu_mem_address;
@@ -862,18 +862,18 @@ module tt_um_petersn_micro1 (
     .error_out(error_out),
     .vga_counter(ctr),
 
-    // .mem_address(cache_mem_address),
-    // .mem_write_value(cache_mem_write_value),
-    // .mem_write_enable(cache_mem_write_enable),
-    // .mem_read_value(cache_mem_read_value),
-    // .mem_request(cache_mem_request),
-    // .mem_request_complete(cache_mem_request_complete),
-    .mem_address(cpu_mem_address),
-    .mem_write_value(cpu_mem_write_value),
-    .mem_write_enable(cpu_mem_write_enable),
-    .mem_read_value(cpu_mem_read_value),
-    .mem_request(cpu_mem_request),
-    .mem_request_complete(cpu_mem_request_complete),
+    .mem_address(cache_mem_address),
+    .mem_write_value(cache_mem_write_value),
+    .mem_write_enable(cache_mem_write_enable),
+    .mem_read_value(cache_mem_read_value),
+    .mem_request(cache_mem_request),
+    .mem_request_complete(cache_mem_request_complete),
+    // .mem_address(cpu_mem_address),
+    // .mem_write_value(cpu_mem_write_value),
+    // .mem_write_enable(cpu_mem_write_enable),
+    // .mem_read_value(cpu_mem_read_value),
+    // .mem_request(cpu_mem_request),
+    // .mem_request_complete(cpu_mem_request_complete),
 
     .gpio_out(processor_gpio_out),
     .gpio_in(uio_in),
