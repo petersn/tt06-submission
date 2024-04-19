@@ -231,6 +231,16 @@ module tt_um_petersn_micro1 (
   assign uio_out[2] = 1;
   assign uio_out[5] = 1;
 
+  // Drive all remaining pins.
+  assign uo_out[7] = 0;
+  assign uo_out[6] = 0;
+  assign uo_out[5] = 0;
+  assign uio_out[7] = 0;
+  assign uio_out[6] = 0;
+  assign uio_out[1] = 0;
+  assign uio_oe[7] = 0;
+  assign uio_oe[6] = 0;
+
   reg [3:0] mem_controller_clock_divider = 0;
   always @(posedge clk_100mhz) begin
     mem_controller_clock_divider <= mem_controller_clock_divider + 1;
