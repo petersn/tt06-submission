@@ -620,7 +620,8 @@ module tt_um_petersn_micro1 (
   wire sram_so = ui_in[0];
 
   reg [`SRAM_ADDRESS_SIZE - 1 : 0] video_mem_address;
-  reg [`MEMORY_WORD_SIZE - 1 : 0]  video_mem_write_value;
+  // reg [`MEMORY_WORD_SIZE - 1 : 0]  video_mem_write_value;
+  wire [`MEMORY_WORD_SIZE - 1 : 0]  video_mem_write_value = 16'h0000;
   reg                              video_mem_write_enable;
   reg [`MEMORY_WORD_SIZE - 1 : 0]  video_mem_read_value;
   reg                              video_mem_request;
