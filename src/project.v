@@ -774,7 +774,7 @@ module processor(
   end
 endmodule
 
-module micro1 (
+module tt_um_petersn_micro1 (
   input  wire [7:0] ui_in,      // dedicated inputs
   output wire [7:0] uo_out,     // dedicated outputs
   input  wire [7:0] uio_in,     // bidirectional input path
@@ -782,8 +782,7 @@ module micro1 (
   output wire [7:0] uio_oe,     // bidir output enable (high=out)
   input  wire       ena,        // high when enabled
   input  wire       clk_100mhz, // clock
-  input  wire       rst_n,       // reset negated (low to reset)
-  output wire       led        // LED output
+  input  wire       rst_n       // reset negated (low to reset)
 );
   wire clk_100mhz = clk;
 
