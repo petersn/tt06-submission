@@ -43,6 +43,8 @@ module memory_controller (
         counter <= 0;
         sram_cs_n <= 1;
         in_flight <= 0;
+        mem_request_complete0 <= 0;
+        mem_request_complete1 <= 0;
       end else begin
         if (in_flight) begin
           sram_cs_n <= 0;
@@ -156,49 +158,54 @@ module cache (
 
   always @(posedge clk) begin
     if (ena) begin
-      // Check for an incoming request to the cache.
-      if (cache_request) begin
-        // All writes go through.
-        if (cache_write_enable) begin
-          if (!cache_miss) begin
-            // We must update the cache entry.
-            cache_values[hit_cache_line] <= cache_write_value;
-          end
+      if (!rst_n) begin
+        mem_request <= 0;
+        cache_request_complete <= 0;
+      end else begin
+        // Check for an incoming request to the cache.
+        if (cache_request) begin
+          // All writes go through.
+          if (cache_write_enable) begin
+            if (!cache_miss) begin
+              // We must update the cache entry.
+              cache_values[hit_cache_line] <= cache_write_value;
+            end
 
-          if ((!mem_request) && (!mem_request_complete)) begin
-            mem_request <= 1;
-            mem_address <= cache_address;
-            mem_write_value <= cache_write_value;
-            mem_write_enable <= 1;
-          end if (mem_request_complete) begin
-            mem_request <= 0;
-            cache_request_complete <= 1;
-          end
-        end else begin
-          if (cache_miss) begin
-            // === Handle a cache miss read ===
             if ((!mem_request) && (!mem_request_complete)) begin
-              // Read the value from memory.
               mem_request <= 1;
               mem_address <= cache_address;
-              mem_write_enable <= 0;
-            end else if (mem_request_complete) begin
-              cache_read_value <= mem_read_value;
-              cache_values[eviction_counter] <= mem_read_value;
-              cache_addresses[eviction_counter] <= cache_address;
-              eviction_counter <= eviction_counter + 1;
+              mem_write_value <= cache_write_value;
+              mem_write_enable <= 1;
+            end if (mem_request_complete) begin
               mem_request <= 0;
               cache_request_complete <= 1;
             end
           end else begin
-            // === Handle a cache hit read ===
-            cache_read_value <= cache_values[hit_cache_line];
-            cache_request_complete <= 1;
+            if (cache_miss) begin
+              // === Handle a cache miss read ===
+              if ((!mem_request) && (!mem_request_complete)) begin
+                // Read the value from memory.
+                mem_request <= 1;
+                mem_address <= cache_address;
+                mem_write_enable <= 0;
+              end else if (mem_request_complete) begin
+                cache_read_value <= mem_read_value;
+                cache_values[eviction_counter] <= mem_read_value;
+                cache_addresses[eviction_counter] <= cache_address;
+                eviction_counter <= eviction_counter + 1;
+                mem_request <= 0;
+                cache_request_complete <= 1;
+              end
+            end else begin
+              // === Handle a cache hit read ===
+              cache_read_value <= cache_values[hit_cache_line];
+              cache_request_complete <= 1;
+            end
           end
+        end else begin
+          // Otherwise, acknowledge the request.
+          cache_request_complete <= 0;
         end
-      end else begin
-        // Otherwise, acknowledge the request.
-        cache_request_complete <= 0;
       end
     end
   end
@@ -983,6 +990,7 @@ module tt_um_petersn_micro1 (
         line_ptr <= 0;
         lfsr <= 1;
         video_mem_address <= 0;
+        video_mem_request <= 0;
       end else begin
         lfsr <= {lfsr[30:0], lfsr[31] ^ lfsr[21] ^ lfsr[1] ^ lfsr[0]};
         ctr <= ctr + 1;
