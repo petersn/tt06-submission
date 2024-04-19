@@ -781,7 +781,7 @@ module tt_um_petersn_micro1 (
   output wire [7:0] uio_out,    // bidirectional output path
   output wire [7:0] uio_oe,     // bidir output enable (high=out)
   input  wire       ena,        // high when enabled
-  input  wire       clk_100mhz, // clock
+  input  wire       clk,        // clock
   input  wire       rst_n       // reset negated (low to reset)
 );
   wire clk_100mhz = clk;
