@@ -759,6 +759,10 @@ module processor(
               endcase
               ifetch_required <= 1;
             end
+            4'b1111: begin
+              // $display("HCF");
+              error <= 3;
+            end
             default: begin
               // $display("BADOP");
               error <= 2;
@@ -894,11 +898,11 @@ module micro1 (
   end
 
   // Assign the serial clock.
-  assign sram_sck = !(mem_controller_clock_divider[3] ^ mem_controller_clock_divider[2]);
+  assign sram_sck = !(mem_controller_clock_divider[1] ^ mem_controller_clock_divider[0]);
 
   memory_controller memory_controller_inst(
     .ena(ena),
-    .clk(mem_controller_clock_divider[3]),
+    .clk(mem_controller_clock_divider[1]),
     .rst_n(rst_n),
 
     .mem_address0(video_mem_address),
@@ -932,15 +936,15 @@ module micro1 (
 
   reg mem_fill = 0;
 
-  wire video_en = (scanline >= 35) && (scanline < 515) && (ctr < 2700);
+  wire video_en = (scanline >= 35) && (scanline < 515) && (ctr < 1350);
 
   // We now figure out which character we're at.
   wire [9:0] offset_scanline = scanline - 35;
   wire [4:0] current_row = offset_scanline[8:4];
   wire [3:0] pixel_y = offset_scanline[3:0];
   // Each pixel is 4 cycles long.
-  wire [6:0] current_col = ctr[12:6];
-  wire [3:0] pixel_x = ctr[5:2];
+  wire [6:0] current_col = ctr[11:5];
+  wire [3:0] pixel_x = ctr[4:1];
 
   wire [15:0] current_char_pair = current_col >= 40 ? 0 : (line_flip ? line_buffer2[current_col >> 1] : line_buffer1[current_col >> 1]);
   wire [7:0] current_char = current_col[0] ? current_char_pair[15:8] : current_char_pair[7:0];
@@ -968,7 +972,7 @@ module micro1 (
   assign vga_b = 0 & video_en;
 
   assign vga_vs = scanline >= 2;
-  assign vga_hs = (ctr < 2700) || (ctr > 3000);
+  assign vga_hs = (ctr < 1350) || (ctr > 1500);
 
   always @(posedge clk_100mhz) begin
     if (ena) begin
@@ -984,7 +988,7 @@ module micro1 (
         lfsr <= {lfsr[30:0], lfsr[31] ^ lfsr[21] ^ lfsr[1] ^ lfsr[0]};
         ctr <= ctr + 1;
 
-        if (ctr >= 3200) begin
+        if (ctr >= 1600) begin
           ctr <= 0;
           scanline <= scanline < 524 ? scanline + 1 : 0;
           if (offset_scanline[3:0] == 4'b1111) begin
