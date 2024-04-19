@@ -836,7 +836,7 @@ module tt_um_petersn_micro1 (
     .cache_read_value(cache_mem_read_value),
     .cache_request(cache_mem_request),
     .cache_request_complete(cache_mem_request_complete)
-  // );
+  );
 
   // wire [`SRAM_ADDRESS_SIZE - 1 : 0] cache_mem_address = cpu_mem_address;
   // wire [`MEMORY_WORD_SIZE - 1 : 0]  cache_mem_write_value = cpu_mem_write_value;
